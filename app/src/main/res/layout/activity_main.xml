@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Toolbar
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#11B3C2"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Editor de Texto"
+            android:textColor="@color/white"
+
+            android:textSize="20sp"
+            />
+    </Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="12dp"
+        >
+
+        <EditText
+            android:id="@+id/Text_Editor"
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/rascunho_buttons_layout"
+
+            android:layout_marginTop="1dp"
+
+            android:background="@drawable/stroke_retangle"
+            android:layout_marginBottom="1dp"
+
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="12dp"
+
+
+            android:hint="Digite o texto aqui..."
+            android:gravity="top"
+
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            android:id="@+id/rascunho_buttons_layout"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintTop_toBottomOf="@id/Text_Editor"
+            app:layout_constraintBottom_toTopOf="@id/save_file"
+
+            android:layout_marginVertical="12dp"
+            >
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/carregar_rascunho"
+
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+
+                app:layout_constraintTop_toTopOf="@id/rascunho_buttons_layout"
+                app:layout_constraintRight_toLeftOf="@id/salvar_rascunho"
+                app:layout_constraintLeft_toLeftOf="parent"
+
+                android:layout_marginRight="6dp"
+
+                android:background="#EDD42D"
+
+                android:text="Carregar Rascunho"
+                android:textColor="@color/white"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/salvar_rascunho"
+
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+
+                app:layout_constraintTop_toTopOf="@id/rascunho_buttons_layout"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/carregar_rascunho"
+
+                android:layout_marginLeft="6dp"
+
+                android:background="#EDD42D"
+
+                android:text="Salvar Rascunho"
+                android:textColor="@color/white"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/save_file"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+
+            app:layout_constraintTop_toBottomOf="@id/rascunho_buttons_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            android:background="#11B3C2"
+
+            android:text="Salvar no Dispositivo"
+            android:textColor="@color/white"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
