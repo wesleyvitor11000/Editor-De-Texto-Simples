@@ -1,1 +1,1 @@
-Editor de texto simples, feito apenas para se estudar manipulaá∆o de arquivos. 
+Editor de texto simples, feito apenas para se estudar manipula√ß√£o de arquivos. 
