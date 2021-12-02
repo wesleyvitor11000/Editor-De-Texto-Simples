@@ -15,24 +15,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       /* Toolbar topBar = findViewById(R.id.top_bar);
+        Toolbar topBar = findViewById(R.id.top_bar);
 
         Button carregarRascunhoButton = findViewById(R.id.carregar_rascunho);
+        Button salvarRascunhoButton = findViewById(R.id.salvar_rascunho);
         EditText texto = findViewById(R.id.text_editor);
 
         setSupportActionBar(topBar);
-
         if(getSupportActionBar() != null){
-            getSupportActionBar().setTitle("Editor De Textos");
+             getSupportActionBar().setTitle("");
         }
 
 
+        salvarRascunhoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FileUtil.salvarRascunho(texto.getText().toString());
+            }
+        });
 
         carregarRascunhoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                texto.setText(FileUtil.lerRascunho(getAssets()));
+                texto.setText(FileUtil.recuperarRascunho(getAssets()));
             }
-        });*/
+        });
     }
 }
