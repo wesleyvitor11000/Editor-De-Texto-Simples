@@ -1,4 +1,4 @@
-package com.example.simplenotebook;
+package com.example.simpletexteditor;
 
 import androidx.appcompat.app.AppCompatActivity;
 

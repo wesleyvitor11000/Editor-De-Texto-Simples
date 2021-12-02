@@ -1,9 +1,8 @@
-package com.example.simplenotebook;
+package com.example.simpletexteditor;
 
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.text.Editable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,8 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class FileUtil {
 
