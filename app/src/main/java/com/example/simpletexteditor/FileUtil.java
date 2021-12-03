@@ -23,8 +23,10 @@ public class FileUtil {
     private FileUtil(){
 
     }
-    private static String rascunhoNome = "rascunho.txt";
+    private static String rascunhoNome = "rascunho.ste";
     private static final String TAG = "FileUtil";
+
+
 
     public static Uri salvarRascunho(String rascunhoContent){
 
@@ -34,34 +36,11 @@ public class FileUtil {
 
         FileOutputStream fluxoDeSaida = null;
 
-        try{
-            if(file.exists()){
-                file.delete();
-            }
-
-            file.createNewFile();
-
-
-
-        } catch (IOException e) {
-            Log.e(TAG, "Arquivo inacessível", e);
+        if(file.exists()){
+            file.delete();
         }
 
-        try{
-            fluxoDeSaida = new FileOutputStream(file);
-
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "Não foi possível acessar o caminho do arquivo.", e);
-        }
-
-        if(fluxoDeSaida!=null){
-            try{
-                fluxoDeSaida.write(rascunhoContent.getBytes());
-                fluxoDeSaida.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        salvarNaMemoria(file, rascunhoContent);
 
         return Uri.fromFile(file);
     }
@@ -94,30 +73,52 @@ public class FileUtil {
         return rascunho;
     }
 
-    public static void salvarArquivo(String fileName, String Content, Context c) {
+    public static void salvarArquivo(String fileName, String content, Context c) {
 
         String raiz = Environment.getExternalStorageDirectory() + File.separator;
         String diretorio = Environment.DIRECTORY_DOWNLOADS + File.separator;
         File file = new File(raiz + diretorio + fileName);
 
+
+        //try{
+        if(file.exists()){
+
+            overwriteDialog(c, new FileCallback() {
+                @Override
+                public void onClick(boolean choice) {
+                    if(choice){
+                        System.out.println("TRUE");
+                        file.delete();
+
+                        salvarNaMemoria(file, content);
+
+                    }else{
+                        System.out.println("FALSE");
+                        return;
+                    }
+                }
+            });
+
+        }else{
+            salvarNaMemoria(file, content);
+        }
+//
+//        } catch (IOException e) {
+//            Log.e(TAG, "Arquivo inacessível", e);
+//        }
+
+
+
+    }
+
+    private static void salvarNaMemoria(File file, String content){
+
         FileOutputStream fluxoDeSaida = null;
 
-        try{
-            if(file.exists()){
-                if(overwriteDialog(c)){
-                    System.out.println("TRUE");
-                    file.delete();
-                }else{
-                    System.out.println("FALSE");
-                    return;
-                }
-            }
-
+        try {
             file.createNewFile();
-
-
         } catch (IOException e) {
-            Log.e(TAG, "Arquivo inacessível", e);
+            e.printStackTrace();
         }
 
         try{
@@ -129,18 +130,17 @@ public class FileUtil {
 
         if(fluxoDeSaida!=null){
             try{
-                fluxoDeSaida.write(Content.getBytes());
+                fluxoDeSaida.write(content.getBytes());
                 fluxoDeSaida.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
-    private static boolean overwriteDialog(Context c){
+    private static void overwriteDialog(Context c, FileCallback callback){
 
-        final boolean[] overwrite = {true};
+        final boolean[] overwrite = {false};
 
 
         DialogInterface.OnClickListener dialogOnClickListener = new DialogInterface.OnClickListener() {
@@ -148,11 +148,12 @@ public class FileUtil {
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i){
                     case DialogInterface.BUTTON_POSITIVE:
-                        overwrite[0] = true;
+                        callback.onClick(true);
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
-                        overwrite[0] = false;
+                        callback.onClick(false);
+                        break;
                 }
             }
         };
@@ -166,7 +167,6 @@ public class FileUtil {
 
         builder.show();
 
-        return overwrite[0];
     }
 
 }
