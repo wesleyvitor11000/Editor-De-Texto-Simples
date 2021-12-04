@@ -13,10 +13,12 @@ import androidx.annotation.NonNull;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class FileUtil {
 
@@ -27,42 +29,31 @@ public class FileUtil {
     private static final String TAG = "FileUtil";
 
 
-
-    public static Uri salvarRascunho(String rascunhoContent){
-
-        String raiz = Environment.getExternalStorageDirectory() + File.separator;
-        String diretorio = Environment.DIRECTORY_DOWNLOADS + File.separator;
-        File file = new File(raiz + diretorio + rascunhoNome);
-
-        FileOutputStream fluxoDeSaida = null;
-
-        if(file.exists()){
-            file.delete();
-        }
+    public static void salvarRascunho(String rascunhoContent, @NonNull Context c){
+        File dir = c.getFilesDir();
+        File file = new File(dir, rascunhoNome);
 
         salvarNaMemoria(file, rascunhoContent);
 
-        return Uri.fromFile(file);
     }
 
     @NonNull
-    public static String recuperarRascunho(@NonNull AssetManager assetManager){
+    public static String recuperarRascunho(@NonNull AssetManager assetManager, @NonNull Context c){
 
         String rascunho = "";
-
-        String raiz = Environment.getExternalStorageDirectory() + File.separator;
-        String diretorio = Environment.DIRECTORY_DOWNLOADS + File.separator;
-        File file = new File(raiz + diretorio + rascunhoNome);
+        File dir = c.getFilesDir();
+        File file = new File(dir, rascunhoNome);
 
         try{
-            BufferedReader  leitor = new BufferedReader(new FileReader(file));
+            BufferedReader leitor = new BufferedReader(new FileReader(file));
 
             for(String linha = ""; linha != null; linha = leitor.readLine()){
                 rascunho += linha + "\n";
             }
 
             leitor.close();
-        }catch (IOException e){
+
+        } catch (IOException e) {
             Log.e(TAG, "erro ao abrir o rascunho", e);
         }
 
@@ -102,13 +93,6 @@ public class FileUtil {
         }else{
             salvarNaMemoria(file, content);
         }
-//
-//        } catch (IOException e) {
-//            Log.e(TAG, "Arquivo inacessível", e);
-//        }
-
-
-
     }
 
     private static void salvarNaMemoria(File file, String content){

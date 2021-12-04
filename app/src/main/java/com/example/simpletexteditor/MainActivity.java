@@ -37,14 +37,14 @@ public class MainActivity extends AppCompatActivity {
         salvarRascunhoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FileUtil.salvarRascunho(texto.getText().toString());
+                FileUtil.salvarRascunho(texto.getText().toString(), MainActivity.this);
             }
         });
 
         carregarRascunhoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                texto.setText(FileUtil.recuperarRascunho(getAssets()));
+                texto.setText(FileUtil.recuperarRascunho(getAssets(), MainActivity.this));
             }
         });
 
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fileNameDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Salvar");
+        builder.setTitle("Salvar em Downloads");
         builder.setMessage("Insira um nome para o arquivo:");
 
         final EditText fileName = new EditText(this);
