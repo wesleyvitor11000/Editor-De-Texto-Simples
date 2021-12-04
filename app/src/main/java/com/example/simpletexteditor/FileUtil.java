@@ -1,35 +1,37 @@
 package com.example.simpletexteditor;
 
-import android.app.Activity;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.AssetManager;
-import android.net.Uri;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class FileUtil {
 
-    private FileUtil(){
+    private FileUtil() {
 
     }
+
     private static String rascunhoNome = "rascunho.ste";
     private static final String TAG = "FileUtil";
 
 
-    public static void salvarRascunho(String rascunhoContent, @NonNull Context c){
+    public static void salvarRascunho(String rascunhoContent, @NonNull Context c) {
         File dir = c.getFilesDir();
         File file = new File(dir, rascunhoNome);
 
@@ -38,16 +40,16 @@ public class FileUtil {
     }
 
     @NonNull
-    public static String recuperarRascunho(@NonNull AssetManager assetManager, @NonNull Context c){
+    public static String recuperarRascunho(@NonNull Context c) {
 
         String rascunho = "";
         File dir = c.getFilesDir();
         File file = new File(dir, rascunhoNome);
 
-        try{
+        try {
             BufferedReader leitor = new BufferedReader(new FileReader(file));
 
-            for(String linha = ""; linha != null; linha = leitor.readLine()){
+            for (String linha = ""; linha != null; linha = leitor.readLine()) {
                 rascunho += linha + "\n";
             }
 
@@ -64,7 +66,8 @@ public class FileUtil {
         return rascunho;
     }
 
-    public static void salvarArquivo(String fileName, String content, Context c) {
+    public static void salvarArquivo(String fileName, String content, AppCompatActivity activity) {
+
 
         String raiz = Environment.getExternalStorageDirectory() + File.separator;
         String diretorio = Environment.DIRECTORY_DOWNLOADS + File.separator;
@@ -72,27 +75,28 @@ public class FileUtil {
 
 
         //try{
-        if(file.exists()){
+        if (file.exists()) {
 
-            overwriteDialog(c, new FileCallback() {
+            overwriteDialog(activity, new FileCallback() {
                 @Override
                 public void onClick(boolean choice) {
-                    if(choice){
+                    if (choice) {
                         System.out.println("TRUE");
                         file.delete();
 
                         salvarNaMemoria(file, content);
 
-                    }else{
+                    } else {
                         System.out.println("FALSE");
                         return;
                     }
                 }
             });
 
-        }else{
+        } else {
             salvarNaMemoria(file, content);
         }
+
     }
 
     private static void salvarNaMemoria(File file, String content){
@@ -121,6 +125,8 @@ public class FileUtil {
             }
         }
     }
+
+
 
     private static void overwriteDialog(Context c, FileCallback callback){
 

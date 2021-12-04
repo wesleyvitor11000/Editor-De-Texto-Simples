@@ -2,15 +2,18 @@ package com.example.simpletexteditor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Toolbar topBar = findViewById(R.id.top_bar);
 
@@ -34,26 +38,28 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        salvarRascunhoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FileUtil.salvarRascunho(texto.getText().toString(), MainActivity.this);
-            }
-        });
+        salvarRascunhoButton.setOnClickListener(view -> FileUtil.salvarRascunho(texto.getText().toString(), MainActivity.this));
+        carregarRascunhoButton.setOnClickListener(view -> texto.setText(FileUtil.recuperarRascunho(MainActivity.this)));
+        salvarArquivoButton.setOnClickListener(view -> writePermission());
 
-        carregarRascunhoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                texto.setText(FileUtil.recuperarRascunho(getAssets(), MainActivity.this));
-            }
-        });
+    }
 
-        salvarArquivoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fileNameDialog();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            fileNameDialog();
+        }
+    }
+
+    public void writePermission(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return;
             }
-        });
+        }
+        fileNameDialog();
     }
 
     private void fileNameDialog(){
@@ -67,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                FileUtil.salvarArquivo(fileName.getText().toString(), texto.getText().toString(), MainActivity.this);
+                        FileUtil.salvarArquivo(fileName.getText().toString(), texto.getText().toString(), MainActivity.this);
             }
         });
 
